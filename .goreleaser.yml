@@ -5,6 +5,17 @@ before:
   hooks:
     - go mod tidy
 builds:
+  - goos:
+      - darwin
+      - linux
+      - windows
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: linux
+        goarch: 386
+      - goos: windows
+        goarch: 386
   - main: .
     binary: convertTsvToDDL
     ldflags:
