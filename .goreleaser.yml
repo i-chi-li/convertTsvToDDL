@@ -5,19 +5,14 @@ before:
   hooks:
     - go mod tidy
 builds:
-  - goos:
+  - main: .
+    binary: convertTsvToDDL
+    goos:
       - darwin
       - linux
       - windows
-    ignore:
-      - goos: darwin
-        goarch: 386
-      - goos: linux
-        goarch: 386
-      - goos: windows
-        goarch: 386
-  - main: .
-    binary: convertTsvToDDL
+    goarch:
+      - amd64
     ldflags:
       - -s -w
       - -X main.Version={{.Version}}
