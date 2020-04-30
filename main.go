@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-/**
+/*
 クリップボードのタブ区切り文字列をテーブル定義 DDL に変換する。
 カラムは、次の内容になっていること。
 「列名	データ型	サイズ	PK	-	-	-	-	NOT NULL	Default」
@@ -24,7 +24,7 @@ func main() {
 	var pk []string
 	firstLine := true
 
-	fmt.Println("CREATE TABLE IF NOT EXISTS TTTTT (")
+	fmt.Println("CREATE TABLE IF NOT EXISTS `TTTTT` (")
 	for {
 		record, err := rd.Read()
 		if err == io.EOF {
@@ -86,5 +86,5 @@ func main() {
 		// PK がある場合
 		fmt.Printf(",\n  PRIMARY KEY(%s)", strings.Join(pk, ", "))
 	}
-	fmt.Print("\n)\n")
+	fmt.Print("\n);\n")
 }
