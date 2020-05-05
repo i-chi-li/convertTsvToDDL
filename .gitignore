@@ -1,7 +1,5 @@
 # User-specific stuff
-.idea/dataSources/
-.idea/**/*.xml
-.idea/**/$*
+.idea/
 
 # File-based project format
 *.iws
