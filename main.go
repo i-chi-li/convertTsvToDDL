@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/atotto/clipboard"
 	"io"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -31,8 +32,12 @@ func main() {
 			break
 		}
 		if err != nil {
-			fmt.Println("読み込みエラー: ", err)
-			break
+			fmt.Println("【エラー】 読み込みエラー: ", err)
+			os.Exit(-1)
+		}
+		if len(record) < 10 {
+			fmt.Printf("【エラー】 TSV のカラム数不足[cols: %d]\n", len(record))
+			os.Exit(-1)
 		}
 		if !firstLine {
 			fmt.Print(",\n")
@@ -68,7 +73,8 @@ func main() {
 			// デフォルト値が指定されている場合
 			if len(notNull) != 0 && record[9] == "NULL" {
 				// NotNull カラムなのに、デフォルト値が Null の場合
-				println(record[0] + " NOT NULL Column but Default NULL")
+				println("【エラー】 '" + record[0] + "' カラムは、'NOT NULL' だが 'DEFAULT' は 'NULL'")
+				os.Exit(-1)
 			} else if _, err = strconv.Atoi(record[9]); err == nil || record[9] == "NULL" {
 				// デフォルト値が数値の場合
 				defaultValue = "DEFAULT " + record[9]
