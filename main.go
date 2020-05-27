@@ -16,6 +16,8 @@ import (
 「列名	データ型	サイズ	PK	-	-	-	-	NOT NULL	Default」
 */
 func main() {
+	// 処理結果
+	result := ""
 	// クリップボードから読み込み
 	data, _ := clipboard.ReadAll()
 	rd := csv.NewReader(strings.NewReader(data))
@@ -25,7 +27,7 @@ func main() {
 	var pk []string
 	firstLine := true
 
-	fmt.Println("CREATE TABLE IF NOT EXISTS `TTTTT` (")
+	result += "CREATE TABLE IF NOT EXISTS `TTTTT` (\n"
 	for {
 		record, err := rd.Read()
 		if err == io.EOF {
@@ -40,7 +42,7 @@ func main() {
 			os.Exit(-1)
 		}
 		if !firstLine {
-			fmt.Print(",\n")
+			result += ",\n"
 		}
 
 		// PK 項目
@@ -84,13 +86,15 @@ func main() {
 			}
 		}
 
-		// 標準出力にカラムの定義を出力
-		fmt.Printf("  `%s` %s %s %s", record[0], colType, notNull, defaultValue)
+		// カラムの定義を出力
+		result += fmt.Sprintf("  `%s` %s %s %s", record[0], colType, notNull, defaultValue)
 		firstLine = false
 	}
 	if len(pk) != 0 {
 		// PK がある場合
-		fmt.Printf(",\n  PRIMARY KEY(%s)", strings.Join(pk, ", "))
+		result += fmt.Sprintf(",\n  PRIMARY KEY(%s)", strings.Join(pk, ", "))
 	}
-	fmt.Print("\n);\n")
+	result += "\n);\n"
+	fmt.Print(result)
+	_ = clipboard.WriteAll(result)
 }
